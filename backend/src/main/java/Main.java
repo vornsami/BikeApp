@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 import network.BikeServer;
+import utils.MissingPropertyException;
 
 public class Main {
 	private static final String CONF_FILENAME = "server.conf";
@@ -23,16 +24,32 @@ public class Main {
 	
 	private static Properties prepareProps() {
 		Properties props = new Properties();
-		String fileName = CONF_FILENAME;
 
 		try {
-			FileInputStream fis = new FileInputStream(fileName);
+			
+			FileInputStream fis = new FileInputStream(CONF_FILENAME);
 			props.load(fis);
-		}  catch (IOException e) {
-		    System.out.println("Error loading config file,\n" + e);
+			validateProps(props);
+			
+		}  catch (MissingPropertyException e) {
+			Logger.getGlobal().warning(e.getMessage());
+		    return null;
+		} catch (IOException e) {
+			Logger.getGlobal().warning("Error loading config file,\n" + e.getMessage());
 		    return null;
 		}
 		return props;
+	}
+	
+	private static boolean validateProps(Properties props) throws MissingPropertyException {
+		String[] importantProps = new String[] {"appname", "version", "serverport", "databaselocation", "databaseName"};
+		String errMessage = "";
+		
+		for (String prop : importantProps) {
+			if (props.getProperty(prop) == null) errMessage += ", " + prop;
+		}
+		if (errMessage.length() > 0) throw new MissingPropertyException("Missing properties: " + errMessage.substring(2));
+		return true;
 	}
 	
 	private static void runServer(int port) {
