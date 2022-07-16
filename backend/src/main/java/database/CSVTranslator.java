@@ -1,6 +1,7 @@
 package database;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import models.BikePath;
 
 public class CSVTranslator {
 	public static List<BikePath> Translate(String filePath)  {
+		Logger logger = Logger.getGlobal();
 		try{
 			FileReader fr = new FileReader(filePath);
             CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
@@ -24,7 +26,7 @@ public class CSVTranslator {
 
             return bikePathList;
         } catch (IOException e) {
-            e.printStackTrace();
+			logger.warning(e.getMessage());
         }
 		return null;
 	}
