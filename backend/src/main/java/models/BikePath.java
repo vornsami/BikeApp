@@ -12,8 +12,8 @@ public class BikePath {
 	private String departureStationName;
 	private int returnStationId;
 	private String returnStationName;
-	private int distance;
-	private int duration;
+	private double distance;
+	private double duration;
 	
 	public Document toDocument() {
 		Document doc = new Document();
@@ -78,19 +78,19 @@ public class BikePath {
 		this.returnStationName = returnStationName;
 	}
 
-	public int getDistance() {
+	public double getDistance() {
 		return distance;
 	}
 
-	public void setDistance(int distance) {
+	public void setDistance(double distance) {
 		this.distance = distance;
 	}
 
-	public int getDuration() {
+	public double getDuration() {
 		return duration;
 	}
 
-	public void setDuration(int duration) {
+	public void setDuration(double duration) {
 		this.duration = duration;
 	}
 }

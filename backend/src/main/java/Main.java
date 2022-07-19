@@ -1,9 +1,12 @@
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import database.CSVTranslator;
+import models.BikePath;
 import network.BikeServer;
 import utils.MissingPropertyException;
 
@@ -16,6 +19,8 @@ public class Main {
 		if(props == null) return;
 		
 		System.out.println("Starting " + props.getProperty("appname") + " server version " + props.getProperty("version") + " at port " + props.getProperty("serverport") + "...");
+		List<BikePath> bp = CSVTranslator.translateAll();
+		System.out.println(bp.size());
 		
 		int portnumber = Integer.parseInt(props.getProperty("serverport"));
 		runServer(portnumber);

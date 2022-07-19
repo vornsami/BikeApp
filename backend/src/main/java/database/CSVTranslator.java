@@ -1,10 +1,16 @@
 package database;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -12,9 +18,36 @@ import com.opencsv.CSVReaderBuilder;
 import models.BikePath;
 
 public class CSVTranslator {
-	public static List<BikePath> Translate(String filePath)  {
+	private static final String CSV_DIRECTORY = "./csv";
+	
+	public static List<BikePath> translateAll() {
+		Logger logger = Logger.getGlobal();
+		try {
+			File csvDir = new File(CSV_DIRECTORY);
+			List<String> csvFiles = Arrays.asList(csvDir.list(CSVTranslator.csvFilter()));
+			List<BikePath> bikePaths = new ArrayList<>();
+
+			logger.info("Accessing csv-files at " + csvDir.toString());
+			
+			for (String filename : csvFiles) {
+				String path = CSV_DIRECTORY + "/" + filename;
+				bikePaths.addAll(CSVTranslator.translate(path));
+			}
+			
+			return bikePaths;
+			
+		} catch (Exception e) {
+			logger.warning(e.getMessage());
+        }
+		return null;
+	}
+	
+	public static List<BikePath> translate(String filePath)  {
 		Logger logger = Logger.getGlobal();
 		try{
+			File asdf = new File("./csv");
+			Files.list(asdf.toPath()).filter(f -> f.endsWith(".csv")).collect(Collectors.toList());
+			
 			FileReader fr = new FileReader(filePath);
             CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
             List<BikePath> bikePathList = 
@@ -40,9 +73,18 @@ public class CSVTranslator {
     	bp.setDepartureStationName(data[3]);
     	bp.setReturnStationId(Integer.parseInt(data[4]));
     	bp.setReturnStationName(data[5]);
-    	bp.setDistance(Integer.parseInt(data[6]));
-    	bp.setDuration(Integer.parseInt(data[7]));
+    	bp.setDistance(Double.parseDouble(data[6]));
+    	bp.setDuration(Double.parseDouble(data[7]));
         
         return bp;
+	}
+	
+	private static FilenameFilter csvFilter() {
+		FilenameFilter filter = new FilenameFilter(){
+			public boolean accept(File f, String filename) {
+				return filename.toLowerCase().endsWith(".csv");
+			}
+		};
+		return filter;
 	}
 }
