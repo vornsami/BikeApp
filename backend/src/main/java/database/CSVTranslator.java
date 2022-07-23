@@ -19,9 +19,42 @@ import models.BikePath;
 
 public class CSVTranslator {
 	private static final String CSV_DIRECTORY = "./csv";
+	private static Logger logger = Logger.getGlobal();
+	
+	public static void translateAllToDatabase() {
+		try {
+			File csvDir = new File(CSV_DIRECTORY);
+			List<String> csvFiles = Arrays.asList(csvDir.list(CSVTranslator.csvFilter()));
+
+			logger.info("Accessing csv-files at " + csvDir.toString());
+			
+			for (String filename : csvFiles) {
+				String path = CSV_DIRECTORY + "/" + filename;
+				CSVTranslator.translateToDatabase(path);
+			}
+			
+		} catch (Exception e) {
+			logger.warning(e.getMessage());
+        }
+		
+		
+	}
+	public static void translateToDatabase(String filePath)  {
+		try{
+			DatabaseManager manager = DatabaseManager.getManager();
+			FileReader fr = new FileReader(filePath);
+            CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
+            List<BikePath> bp = reader.readAll()
+            		.stream()
+            		.map(data -> dataToBikePath(data))
+            		.toList();
+            manager.insertAll(bp);
+        } catch (IOException e) {
+			logger.warning(e.getMessage());
+        }
+	}
 	
 	public static List<BikePath> translateAll() {
-		Logger logger = Logger.getGlobal();
 		try {
 			File csvDir = new File(CSV_DIRECTORY);
 			List<String> csvFiles = Arrays.asList(csvDir.list(CSVTranslator.csvFilter()));
@@ -43,11 +76,7 @@ public class CSVTranslator {
 	}
 	
 	public static List<BikePath> translate(String filePath)  {
-		Logger logger = Logger.getGlobal();
 		try{
-			File asdf = new File("./csv");
-			Files.list(asdf.toPath()).filter(f -> f.endsWith(".csv")).collect(Collectors.toList());
-			
 			FileReader fr = new FileReader(filePath);
             CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
             List<BikePath> bikePathList = 

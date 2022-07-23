@@ -24,8 +24,8 @@ public class BikePath {
 		doc.put("Departure station name", departureStationName);
 		doc.put("Return station id", returnStationId);
 		doc.put("Return station name", returnStationName);
-		doc.put("Covered distance (m)", distance);
-		doc.put("Duration (sec.)", duration);
+		doc.put("Distance", distance);
+		doc.put("Duration", duration);
 		
 		return doc;
 	}

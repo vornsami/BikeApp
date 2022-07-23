@@ -1,5 +1,9 @@
 package database;
 
+import java.util.List;
+
+import org.bson.Document;
+
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -48,5 +52,9 @@ public class DatabaseManager {
     
     public void insertPath(BikePath path) {
     	database.getCollection(BIKE_COLLECTION_NAME).insertOne(path.toDocument());
+    }
+    public void insertAll(List<BikePath> paths) {
+    	List<Document> asDocuments = paths.stream().map(b -> b.toDocument()).toList();
+    	database.getCollection(BIKE_COLLECTION_NAME).insertMany(asDocuments);
     }
 }
