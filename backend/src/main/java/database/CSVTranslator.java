@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -25,12 +23,17 @@ public class CSVTranslator {
 		try {
 			File csvDir = new File(CSV_DIRECTORY);
 			List<String> csvFiles = Arrays.asList(csvDir.list(CSVTranslator.csvFilter()));
+			DatabaseManager manager = DatabaseManager.getManager();
 
 			logger.info("Accessing csv-files at " + csvDir.toString());
 			
 			for (String filename : csvFiles) {
 				String path = CSV_DIRECTORY + "/" + filename;
-				CSVTranslator.translateToDatabase(path);
+				File f = new File(path);
+				if(manager.isCSVNotInserted(f)) {
+					CSVTranslator.translateToDatabase(path);
+					manager.insertCSV(f);
+				}
 			}
 			
 		} catch (Exception e) {
@@ -39,6 +42,7 @@ public class CSVTranslator {
 		
 		
 	}
+	
 	public static void translateToDatabase(String filePath)  {
 		try{
 			DatabaseManager manager = DatabaseManager.getManager();

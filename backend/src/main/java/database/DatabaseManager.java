@@ -1,9 +1,11 @@
 package database;
 
+import java.io.File;
 import java.util.List;
 
 import org.bson.Document;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -53,8 +55,29 @@ public class DatabaseManager {
     public void insertPath(BikePath path) {
     	database.getCollection(BIKE_COLLECTION_NAME).insertOne(path.toDocument());
     }
+    
     public void insertAll(List<BikePath> paths) {
     	List<Document> asDocuments = paths.stream().map(b -> b.toDocument()).toList();
     	database.getCollection(BIKE_COLLECTION_NAME).insertMany(asDocuments);
+    }
+    
+    public boolean isCSVNotInserted(File csvFile) {
+    	BasicDBObject obj = new BasicDBObject();
+    	
+    	obj.put("filename", csvFile.getName());
+    	obj.put("lastmodified", csvFile.lastModified());
+    	
+    	System.out.println(database.getCollection(DATABASE_COLLECTION_NAME).find(obj).first());
+    	return database.getCollection(DATABASE_COLLECTION_NAME).find(obj).first() == null;
+    }
+    
+    public void insertCSV(File csvFile) {
+    	Document doc = new Document();
+    	
+    	doc.put("filename", csvFile.getName());
+    	doc.put("lastmodified", csvFile.lastModified());
+    	
+    	database.getCollection(DATABASE_COLLECTION_NAME).insertOne(doc);
+    	
     }
 }
