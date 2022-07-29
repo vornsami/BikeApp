@@ -1,6 +1,8 @@
 package models;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 import org.bson.Document;
 
@@ -14,6 +16,34 @@ public class BikePath {
 	private String returnStationName;
 	private double distance;
 	private double duration;
+	
+	public static BikePath documentToBikePath(Document doc) {
+		return new BikePath(
+				((Date) 	 doc.get("Departure")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				((Date) 	 doc.get("Return")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				(int) 	 doc.get("Departure station id"),
+				(String) doc.get("Departure station name"),
+				(int) 	 doc.get("Return station id"),
+				(String) doc.get("Return station name"),
+				(double) doc.get("Distance"),
+				(double) doc.get("Duration")
+			);
+	}
+	
+	public BikePath() {
+	}
+	
+	public BikePath(LocalDateTime depT, LocalDateTime retT, int depId, String depName, int retId, String retName, double dis, double dur) {
+		departureTime = depT;
+		returnTime = retT;
+		departureStationId = depId;
+		departureStationName = depName;
+		returnStationId = retId;
+		returnStationName = retName;
+		distance = dis;
+		duration = dur;
+	}
+	
 	
 	public Document toDocument() {
 		Document doc = new Document();
@@ -92,5 +122,10 @@ public class BikePath {
 
 	public void setDuration(double duration) {
 		this.duration = duration;
+	}
+	
+	@Override
+	public String toString() {
+		return departureTime + " - " + returnTime + ": from " + departureStationId + ":" + departureStationName + " to " + returnStationId + ":" + returnStationName + ", " + distance + "m in " + duration;
 	}
 }

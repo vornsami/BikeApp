@@ -1,14 +1,24 @@
 package database;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.IndexModel;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.Sorts;
+import static com.mongodb.client.model.Aggregates.*;
+
 
 import models.BikePath;
 
@@ -25,7 +35,9 @@ public class DatabaseManager {
     	database = client.getDatabase(name);
     	
     	// Creates collections if they do not exist
-    	database.getCollection(BIKE_COLLECTION_NAME);
+    	List<Bson> indexes = Arrays.asList(Indexes.descending("Departure"), Indexes.descending("Return"), Indexes.descending("Distance"), Indexes.descending("Duration"));
+    	List<IndexModel> indexModels = indexes.stream().map(a -> new IndexModel(a)).collect(Collectors.toList());
+    	database.getCollection(BIKE_COLLECTION_NAME).createIndexes(indexModels);
     	database.getCollection(DATABASE_COLLECTION_NAME);
     }
     /**
@@ -67,7 +79,6 @@ public class DatabaseManager {
     	obj.put("filename", csvFile.getName());
     	obj.put("lastmodified", csvFile.lastModified());
     	
-    	System.out.println(database.getCollection(DATABASE_COLLECTION_NAME).find(obj).first());
     	return database.getCollection(DATABASE_COLLECTION_NAME).find(obj).first() == null;
     }
     
@@ -78,6 +89,24 @@ public class DatabaseManager {
     	doc.put("lastmodified", csvFile.lastModified());
     	
     	database.getCollection(DATABASE_COLLECTION_NAME).insertOne(doc);
-    	
     }
+    
+    public List<BikePath> get(int amount, String sortBy, int offset) {
+    	
+    	List<BikePath> bp = new ArrayList<>();
+    	
+    	List<Bson> request = Arrays.asList(
+    			sort(Sorts.descending(sortBy)),
+    			skip(offset),
+    			limit(amount)
+    			);
+    	
+    	database.getCollection(BIKE_COLLECTION_NAME)
+    		.aggregate(request)
+    		.map(a -> BikePath.documentToBikePath(a))
+    		.into(bp);
+    	
+    	return bp;
+    }
+    
 }
