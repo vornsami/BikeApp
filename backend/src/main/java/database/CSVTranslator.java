@@ -35,7 +35,6 @@ public class CSVTranslator {
 					manager.insertCSV(f);
 				}
 			}
-			System.out.println(manager.get(100, "Distance", 0));
 			
 		} catch (Exception e) {
 			logger.warning(e.getMessage());

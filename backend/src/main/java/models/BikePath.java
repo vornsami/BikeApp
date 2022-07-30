@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 import org.bson.Document;
+import org.json.JSONObject;
 
 public class BikePath {
 	
@@ -19,8 +20,8 @@ public class BikePath {
 	
 	public static BikePath documentToBikePath(Document doc) {
 		return new BikePath(
-				((Date) 	 doc.get("Departure")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
-				((Date) 	 doc.get("Return")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				((Date)  doc.get("Departure")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
+				((Date)  doc.get("Return")).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
 				(int) 	 doc.get("Departure station id"),
 				(String) doc.get("Departure station name"),
 				(int) 	 doc.get("Return station id"),
@@ -58,6 +59,21 @@ public class BikePath {
 		doc.put("Duration", duration);
 		
 		return doc;
+	}
+	public JSONObject toJSON() {
+		
+		JSONObject jsonObj = new JSONObject();
+		
+		jsonObj.put("Departure", departureTime);
+		jsonObj.put("Return", returnTime);
+		jsonObj.put("Departure station id", departureStationId);
+		jsonObj.put("Departure station name", departureStationName);
+		jsonObj.put("Return station id", returnStationId);
+		jsonObj.put("Return station name", returnStationName);
+		jsonObj.put("Distance", distance);
+		jsonObj.put("Duration", duration);
+		
+		return jsonObj;
 	}
 
 	public LocalDateTime getReturnTime() {

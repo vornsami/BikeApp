@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoClient;
@@ -107,6 +109,27 @@ public class DatabaseManager {
     		.into(bp);
     	
     	return bp;
+    }
+    
+public JSONArray getAsJSON(int amount, String sortBy, int offset) {
+    	
+    	List<JSONObject> bp = new ArrayList<>();
+    	
+    	List<Bson> request = Arrays.asList(
+    			sort(Sorts.descending(sortBy)),
+    			skip(offset),
+    			limit(amount)
+    			);
+    	
+    	database.getCollection(BIKE_COLLECTION_NAME)
+    		.aggregate(request)
+    		.map(a -> new JSONObject(a.toJson()))
+    		.into(bp);
+    	
+    	JSONArray jsonarr = new JSONArray();
+    	jsonarr.put(bp);
+    	
+    	return jsonarr;
     }
     
 }
