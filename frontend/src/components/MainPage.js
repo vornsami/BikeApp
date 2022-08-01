@@ -4,6 +4,7 @@ import Box from '@material-ui/core/Box'
 
 import getPaths from './services/network'
 import PathList from './PathList'
+import FailPage from './FailPage'
 
 const MainPage = () => {
   const [paths, setPaths] = useState([])
@@ -24,9 +25,13 @@ const MainPage = () => {
     }
   }, [sortBy])
 
-  return <Box>
-      {paths !== undefined && <PathList paths={paths} setSort={setSort}/>}
-    </Box>
+  try {
+    return <Box>
+        {paths !== undefined && <PathList paths={paths} setSort={setSort}/>}
+      </Box>
+  } catch (e) {
+    return <FailPage/>
+  }
 }
 
 export default MainPage

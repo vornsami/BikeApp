@@ -131,7 +131,6 @@ public JSONArray getAsJSON(int amount, String sortBy, int offset) {
     		.into(bp);
     	
     	JSONArray jsonarr = new JSONArray(bp);
-    	
     	return jsonarr;
     }
     

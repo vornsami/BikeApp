@@ -13,8 +13,9 @@ const BikePath = ({path}) => {
         {path['Departure station name']}
       </Grid>
       <Grid item xs='1'>
-        {new Date(path['Departure'].$date).toUTCString()}
+        {new Date(path['Departure']).toUTCString()}
       </Grid>
+      <Grid item xs='1'/>
       <Grid item xs='1'>
         {path['Return station id']}
       </Grid>
@@ -22,8 +23,9 @@ const BikePath = ({path}) => {
         {path['Return station name']}
       </Grid>
       <Grid item xs='1'>
-        {new Date(path['Return'].$date).toUTCString()}
+        {new Date(path['Return']).toUTCString()}
       </Grid>
+      <Grid item xs='1'/>
       <Grid item xs='1'>
         {path['Distance']}
       </Grid>
