@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import org.bson.Document;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
@@ -48,9 +51,9 @@ public class CSVTranslator {
 			DatabaseManager manager = DatabaseManager.getManager();
 			FileReader fr = new FileReader(filePath);
             CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
-            List<BikePath> bp = reader.readAll()
+            List<Document> bp = reader.readAll()
             		.stream()
-            		.map(data -> dataToBikePath(data))
+            		.map(data -> dataToDocument(data))
             		.toList();
             manager.insertAll(bp);
         } catch (IOException e) {
@@ -97,6 +100,24 @@ public class CSVTranslator {
 		return null;
 	}
 	
+	public static List<Document> translateToDocuments(String filePath)  {
+		try{
+			FileReader fr = new FileReader(filePath);
+            CSVReader reader = new CSVReaderBuilder(fr).withSkipLines(1).build();
+            List<Document> bikePathList = 
+            		reader
+            		.readAll()
+            		.stream()
+            		.map(data -> dataToDocument(data))
+            		.collect(Collectors.toList());
+
+            return bikePathList;
+        } catch (IOException e) {
+			logger.warning(e.getMessage());
+        }
+		return null;
+	}
+	
 	private static BikePath dataToBikePath(String[] data) {
 		
 		BikePath bp = new BikePath();
@@ -110,6 +131,21 @@ public class CSVTranslator {
     	bp.setDuration(Double.parseDouble(data[7]));
         
         return bp;
+	}
+	
+	public static Document dataToDocument(String[] data) {
+		Document doc = new Document();
+		
+		doc.put("Departure", data[0]);
+		doc.put("Return", data[1]);
+		doc.put("Departure station id", data[2]);
+		doc.put("Departure station name", data[3]);
+		doc.put("Return station id", data[4]);
+		doc.put("Return station name", data[5]);
+		doc.put("Distance", data[6]);
+		doc.put("Duration", data[7]);
+		
+		return doc;
 	}
 	
 	private static FilenameFilter csvFilter() {

@@ -70,9 +70,13 @@ public class DatabaseManager {
     	database.getCollection(BIKE_COLLECTION_NAME).insertOne(path.toDocument());
     }
     
-    public void insertAll(List<BikePath> paths) {
+    public void insertAll(ArrayList<BikePath> paths) {
     	List<Document> asDocuments = paths.stream().map(b -> b.toDocument()).toList();
     	database.getCollection(BIKE_COLLECTION_NAME).insertMany(asDocuments);
+    }
+    
+    public void insertAll(List<Document> documents) {
+    	database.getCollection(BIKE_COLLECTION_NAME).insertMany(documents);
     }
     
     public boolean isCSVNotInserted(File csvFile) {
@@ -126,8 +130,7 @@ public JSONArray getAsJSON(int amount, String sortBy, int offset) {
     		.map(a -> new JSONObject(a.toJson()))
     		.into(bp);
     	
-    	JSONArray jsonarr = new JSONArray();
-    	jsonarr.put(bp);
+    	JSONArray jsonarr = new JSONArray(bp);
     	
     	return jsonarr;
     }
