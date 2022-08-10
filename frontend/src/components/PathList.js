@@ -10,7 +10,7 @@ const PathList = props => {
      <Grid container spacing={2} >´
       {paths !== undefined && paths.map(path => {
         if (path !== undefined) {
-          return <Grid item xs={12}>
+          return <Grid item xs={12} key={path._id.$oid}>
               <BikePath path={path}/>
             </Grid>
         }
