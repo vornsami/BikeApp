@@ -1,12 +1,17 @@
 import React, { useEffect, useState }  from 'react'
 
 import Box from '@material-ui/core/Box'
+import { useParams } from 'react-router-dom'
 
-import getPaths from './services/network'
+import getPaths from '../services/network'
 import PathList from './PathList'
 import FailPage from './FailPage'
 
 const MainPage = () => {
+  let props = useParams();
+  const page = (props.page)? props.page : 1
+  const pageLength = 50  
+
   const [paths, setPaths] = useState([])
   var sortBy = 'Distance'
   const setSort = newSort => {
@@ -15,7 +20,8 @@ const MainPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const initialPaths = await getPaths(sortBy, 50, 0)
+      const offset = page * pageLength - pageLength
+      const initialPaths = await getPaths(sortBy, pageLength, offset)
       setPaths(initialPaths)
     }
     try {
@@ -23,7 +29,7 @@ const MainPage = () => {
     } catch (e) {
       console.error(e)
     }
-  }, [sortBy])
+  }, [sortBy, page, pageLength])
 
   try {
     return <Box>

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_URL } from '../../config'
+import { API_URL } from '../config'
 
 const getPaths = async (sortBy, num, offset) => {
   const data = { sortBy: sortBy, amount: num, offset: offset }
