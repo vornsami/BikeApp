@@ -4,11 +4,14 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 
 
-const BikePathHeader = ({setSort, sortBy}) => {
+const BikePathHeader = ({setSort, sortBy, setPage}) => {
 
   const HeaderElement = props => {
     const sort = (props.sort)? props.sort : "Distance"
-    return <Button onClick= { () => setSort(sort)}>
+    return <Button onClick= { () => {
+              setSort(sort)
+              setPage(1)
+           }}>
              {props.children} {(sortBy === sort) ? " ↓" : ""}
         </Button>
   }

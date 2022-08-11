@@ -11,7 +11,7 @@ const PathList = ({paths, setSort, sortBy, page, setPage}) => {
   return <div className="BikePath-table">
      <Grid container spacing={2} alignItems="center">
       <Grid item xs={12} key='bp-header' className="BikePath-header">
-        <BikePathHeader setSort={setSort} sortBy={sortBy}/>
+        <BikePathHeader setSort={setSort} sortBy={sortBy} setPage={setPage}/>
       </Grid>
       {paths !== undefined && paths.map(path => {
         if (path !== undefined) {
