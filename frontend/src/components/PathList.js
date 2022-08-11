@@ -3,12 +3,13 @@ import Grid from '@material-ui/core/Grid'
 
 import BikePath from './BikePath'
 import BikePathHeader from './BikePathHeader'
+import PageSelector from './PageSelector'
 import './PathList.css'
 
-const PathList = ({paths, setSort, sortBy}) => {
+const PathList = ({paths, setSort, sortBy, page}) => {
 
   return <div className="BikePath-table">
-     <Grid container spacing={3} alignItems="center">
+     <Grid container spacing={2} alignItems="center">
       <Grid item xs={12} key='bp-header' className="BikePath-header">
         <BikePathHeader setSort={setSort} sortBy={sortBy}/>
       </Grid>
@@ -19,6 +20,9 @@ const PathList = ({paths, setSort, sortBy}) => {
             </Grid>
         }
       })}
+      <Grid item xs={12} key='bp-pages' className="BikePath-header">
+        <PageSelector setSort={setSort} sortBy={sortBy} page={page}/>
+      </Grid>
     </Grid>
   </div>
 }

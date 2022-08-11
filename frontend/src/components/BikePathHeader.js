@@ -1,37 +1,44 @@
 
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
+import Button from '@material-ui/core/Button'
 
 
-const BikePath = ({setSort, sortBy}) => {
-  const sortByElement = <b>↓</b>
+const BikePathHeader = ({setSort, sortBy}) => {
 
-  return <Grid container item spacing={2}>
+  const HeaderElement = props => {
+    const sort = (props.sort)? props.sort : "Distance"
+    return <Button onClick= { () => setSort(sort)}>
+             {props.children} {(sortBy === sort) ? <b>↓</b> : ""}
+        </Button>
+  }
+
+  return <Grid container item spacing={2} xs={12}>
       <Grid item xs>
-        Departure station id {sortBy === 'Departure station id' && sortByElement}
+        <HeaderElement sort={'Departure station id'}>Departure station id</HeaderElement>
       </Grid>
       <Grid item xs>
-        Departure station name {sortBy === 'Departure station name' && sortByElement}
+        <HeaderElement sort={'Departure station name'}>Departure station name</HeaderElement>
       </Grid>
       <Grid item xs>
-        Departure time {sortBy === 'Departure' && sortByElement}
+        <HeaderElement sort={'Departure'}>Departure time</HeaderElement>
       </Grid>
       <Grid item xs>
-        Return station id {sortBy === 'Return station id' && sortByElement}
+        <HeaderElement sort={'Return station id'}>Return station id</HeaderElement>
       </Grid>
       <Grid item xs>
-        Return station name {sortBy === 'Return station name' && sortByElement}
+        <HeaderElement sort={'Return station name'}>Return station name</HeaderElement>
       </Grid>
       <Grid item xs>
-        Return time {sortBy === 'Return' && sortByElement}
+        <HeaderElement sort={'Return'}>Return time</HeaderElement>
       </Grid>
       <Grid item xs>
-        Distance {sortBy === 'Distance' && sortByElement}
+        <HeaderElement sort={'Distance'}>Distance (m)</HeaderElement>
       </Grid>
       <Grid item xs>
-        Duration {sortBy === 'Duration' && sortByElement}
+        <HeaderElement sort={'Duration'}>Duration (s)</HeaderElement>
       </Grid>
     </Grid>
 }
 
-export default BikePath
+export default BikePathHeader

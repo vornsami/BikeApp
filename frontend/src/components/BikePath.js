@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 
 const BikePath = ({path}) => {
   
-  return <Grid container item spacing={2}>
+  return <Grid container item spacing={2} xs={12}>
       <Grid item xs>
         {path['Departure station id']}
       </Grid>

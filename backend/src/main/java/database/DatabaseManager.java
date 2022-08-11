@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
@@ -36,8 +37,9 @@ public class DatabaseManager {
     	client = MongoClients.create(location);
     	database = client.getDatabase(name);
     	
-    	// Creates collections if they do not exist
-    	List<Bson> indexes = Arrays.asList(Indexes.descending("Departure"), Indexes.descending("Return"), Indexes.descending("Distance"), Indexes.descending("Duration"));
+    	// Creates collections and indexes if they do not exist
+    	Logger.getGlobal().info("Checking indexes...");
+    	List<Bson> indexes = Arrays.asList(Indexes.descending("Departure"), Indexes.descending("Return"), Indexes.descending("Distance"), Indexes.descending("Duration"), Indexes.descending("Departure station name"),Indexes.descending("Return station name"), Indexes.descending("Return station id"), Indexes.descending("Departure station id"));
     	List<IndexModel> indexModels = indexes.stream().map(a -> new IndexModel(a)).collect(Collectors.toList());
     	database.getCollection(BIKE_COLLECTION_NAME).createIndexes(indexModels);
     	database.getCollection(DATABASE_COLLECTION_NAME);
