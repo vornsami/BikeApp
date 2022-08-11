@@ -33,7 +33,7 @@ const MainPage = () => {
 
   try {
     return <Box>
-        {paths !== undefined && <PathList paths={paths} setSort={setSort}/>}
+        {paths !== undefined && <PathList paths={paths} setSort={setSort} sortBy={sortBy}/>}
       </Box>
   } catch (e) {
     return <FailPage/>

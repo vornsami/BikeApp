@@ -6,7 +6,7 @@ const FailPage = () => {
   
   return <Box>
       <Grid container>
-        <Grid item>There seems to have been an error with your request.</Grid>
+        <Grid item>There seems to have been an error.</Grid>
       </Grid>
     </Box>
 }
