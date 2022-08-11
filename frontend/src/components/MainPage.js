@@ -9,11 +9,11 @@ import FailPage from './FailPage'
 
 const MainPage = () => {
   let props = useParams();
-  const page = (props.page)? props.page : 1
-  const pageLength = 25 
+  const pageLength = 24 
 
   const [paths, setPaths] = useState([])
   const [sort, setSort] = useState('Distance')
+  const [page, setPage] = useState((props.page)? props.page : 1)
 
   useEffect(() => {
     async function fetchData() {
@@ -26,10 +26,10 @@ const MainPage = () => {
     } catch (e) {
       console.error(e)
     }
-  }, [sort])
-
+  }, [sort, page])
+ 
   return <Box>
-      {paths !== undefined && <PathList paths={paths} setSort={setSort} sortBy={sort} page={page}/>}
+      {paths !== undefined && <PathList paths={paths} setSort={setSort} sortBy={sort} page={page} setPage={setPage}/>}
     </Box>
 }
 

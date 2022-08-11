@@ -6,7 +6,7 @@ import BikePathHeader from './BikePathHeader'
 import PageSelector from './PageSelector'
 import './PathList.css'
 
-const PathList = ({paths, setSort, sortBy, page}) => {
+const PathList = ({paths, setSort, sortBy, page, setPage}) => {
 
   return <div className="BikePath-table">
      <Grid container spacing={2} alignItems="center">
@@ -21,7 +21,7 @@ const PathList = ({paths, setSort, sortBy, page}) => {
         }
       })}
       <Grid item xs={12} key='bp-pages' className="BikePath-header">
-        <PageSelector setSort={setSort} sortBy={sortBy} page={page}/>
+        <PageSelector page={page} setPage={setPage}/>
       </Grid>
     </Grid>
   </div>

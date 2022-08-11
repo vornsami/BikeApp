@@ -3,17 +3,17 @@ import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 
 
-const PageSelector = ({page}) => {
+const PageSelector = ({page, setPage}) => {
   return <Grid container item spacing={2}>
       {page && page > 1 && <Grid item xs>
-        <Button>← Last Page</Button>
+        <Button onClick= {() => {setPage(page-1)}}>← Last Page</Button>
       </Grid> || <Grid item xs>
          
       </Grid>
 
       }
       <Grid item xs>
-        <Button>Next Page →</Button>
+        <Button onClick= {() => {setPage(page+1)}}>Next Page →</Button>
       </Grid>
     </Grid>
 }

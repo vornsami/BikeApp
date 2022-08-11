@@ -9,7 +9,7 @@ const BikePathHeader = ({setSort, sortBy}) => {
   const HeaderElement = props => {
     const sort = (props.sort)? props.sort : "Distance"
     return <Button onClick= { () => setSort(sort)}>
-             {props.children} {(sortBy === sort) ? <b>↓</b> : ""}
+             {props.children} {(sortBy === sort) ? " ↓" : ""}
         </Button>
   }
 

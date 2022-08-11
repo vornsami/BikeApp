@@ -36,10 +36,10 @@ public class DatabaseManager {
     private DatabaseManager(String location, String name) {
     	client = MongoClients.create(location);
     	database = client.getDatabase(name);
-    	
+
     	// Creates collections and indexes if they do not exist
     	Logger.getGlobal().info("Checking indexes...");
-    	List<Bson> indexes = Arrays.asList(Indexes.descending("Departure"), Indexes.descending("Return"), Indexes.descending("Distance"), Indexes.descending("Duration"), Indexes.descending("Departure station name"),Indexes.descending("Return station name"), Indexes.descending("Return station id"), Indexes.descending("Departure station id"));
+    	List<Bson> indexes = Arrays.asList(Indexes.descending("Departure"), Indexes.descending("Return"), Indexes.descending("Distance"), Indexes.descending("Duration"), Indexes.ascending("Departure station name"),Indexes.ascending("Return station name"), Indexes.ascending("Return station id"), Indexes.ascending("Departure station id"));
     	List<IndexModel> indexModels = indexes.stream().map(a -> new IndexModel(a)).collect(Collectors.toList());
     	database.getCollection(BIKE_COLLECTION_NAME).createIndexes(indexModels);
     	database.getCollection(DATABASE_COLLECTION_NAME);
@@ -104,7 +104,7 @@ public class DatabaseManager {
     	List<BikePath> bp = new ArrayList<>();
     	
     	List<Bson> request = Arrays.asList(
-    			sort(Sorts.descending(sortBy)),
+    			sort(selectSort(sortBy)),
     			skip(offset),
     			limit(amount)
     			);
@@ -117,12 +117,23 @@ public class DatabaseManager {
     	return bp;
     }
     
-public JSONArray getAsJSON(int amount, String sortBy, int offset) {
+    private Bson selectSort(String sortBy) {
+    	if (sortBy.equals("Departure station name") || sortBy.equals("Departure station id")  || sortBy.equals("Return station name") || sortBy.equals("Return station id")) {
+    		return Sorts.ascending(sortBy);
+    	}
+    	return Sorts.descending(sortBy);
+    }
+    
+    public void dropDatabase() {
+    	database.drop();
+    }
+    
+    public JSONArray getAsJSON(int amount, String sortBy, int offset) {
     	
     	List<JSONObject> bp = new ArrayList<>();
     	
     	List<Bson> request = Arrays.asList(
-    			sort(Sorts.descending(sortBy)),
+    			sort(selectSort(sortBy)),
     			skip(offset),
     			limit(amount)
     			);
