@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom'
 
 import getPaths from '../services/network'
 import PathList from './PathList'
-import FailPage from './FailPage'
 
 const MainPage = () => {
   let props = useParams();
