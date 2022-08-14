@@ -1,13 +1,12 @@
+package main;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import database.CSVTranslator;
 import database.DatabaseManager;
-import models.BikePath;
 import network.BikeServer;
 import utils.MissingPropertyException;
 

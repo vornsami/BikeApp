@@ -3,7 +3,6 @@ package database;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -21,9 +20,6 @@ import com.mongodb.client.model.IndexModel;
 import com.mongodb.client.model.Indexes;
 import com.mongodb.client.model.Sorts;
 import static com.mongodb.client.model.Aggregates.*;
-
-
-import models.BikePath;
 
 public class DatabaseManager {
 	private static final String BIKE_COLLECTION_NAME = "bike";
@@ -68,15 +64,6 @@ public class DatabaseManager {
     	return database;
     }
     
-    public void insertPath(BikePath path) {
-    	database.getCollection(BIKE_COLLECTION_NAME).insertOne(path.toDocument());
-    }
-    
-    public void insertAll(ArrayList<BikePath> paths) {
-    	List<Document> asDocuments = paths.stream().map(b -> b.toDocument()).toList();
-    	database.getCollection(BIKE_COLLECTION_NAME).insertMany(asDocuments);
-    }
-    
     public void insertAll(List<Document> documents) {
     	database.getCollection(BIKE_COLLECTION_NAME).insertMany(documents);
     }
@@ -97,24 +84,6 @@ public class DatabaseManager {
     	doc.put("lastmodified", csvFile.lastModified());
     	
     	database.getCollection(DATABASE_COLLECTION_NAME).insertOne(doc);
-    }
-    
-    public List<BikePath> get(int amount, String sortBy, int offset) {
-    	
-    	List<BikePath> bp = new ArrayList<>();
-    	
-    	List<Bson> request = Arrays.asList(
-    			sort(selectSort(sortBy)),
-    			skip(offset),
-    			limit(amount)
-    			);
-    	
-    	database.getCollection(BIKE_COLLECTION_NAME)
-    		.aggregate(request)
-    		.map(a -> BikePath.documentToBikePath(a))
-    		.into(bp);
-    	
-    	return bp;
     }
     
     private Bson selectSort(String sortBy) {

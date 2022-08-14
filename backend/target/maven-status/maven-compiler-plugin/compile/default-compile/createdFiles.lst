@@ -1,0 +1,8 @@
+network\BikeServerHttpHandlers$defaultHandler.class
+network\BikeServerHttpHandlers.class
+database\CSVTranslator$1.class
+network\BikeServerHttpHandlers$pageHandler.class
+database\DatabaseManager.class
+utils\MissingPropertyException.class
+database\CSVTranslator.class
+network\BikeServer.class
