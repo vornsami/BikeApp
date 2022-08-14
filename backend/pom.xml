@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>backend-bikeapp</groupId>
   <artifactId>backend-bikeapp</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0</version>
   <name>Bike app backend</name>
   <packaging>jar</packaging>
   <properties>
